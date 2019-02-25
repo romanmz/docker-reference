@@ -1,0 +1,56 @@
+version: "3"
+services:
+  # define a service named 'web'
+  web:
+    # defines the image the service will use, make sure this points to the correct repository
+    image: romanmartinez/get-started:part2
+    # instructs to deploy 5 containers, each one limited to use at most 10% of CPU and 50MB of RAM
+    # also instructs to restart the containers if one fails
+    deploy:
+      replicas: 5
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    # map the port 80 of the host computer to the port 80 of the service
+    ports:
+      - "80:80"
+    # instructs the containers to share the same port (80) via a load-balanced network called 'webnet' (defined below)
+    networks:
+      - webnet
+  # visualizer service (vendor)
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    # this gives the visualizer access to the host’s socket file for Docker
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      # runs this service only on the swarm manager
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+  # add redis (persistent data)
+  redis:
+    image: redis
+    # redis uses this port by default
+    ports:
+      - "6379:6379"
+    # will always run on the same machine (swarm manager),
+    # and maps a folder from the host machine to a folder within the container
+    # this allows us to create persistent data as we can always expect to find it in the same place anytime
+    volumes:
+      - "/home/docker/data:/data"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    command: redis-server --appendonly yes
+    networks:
+      - webnet
+networks:
+  # define a load-balanced overlay network named 'webnet' (no settings pased, so defaults will be used)
+  webnet:
