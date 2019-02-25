@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Docker Reference</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<link href="styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="wrapper">
+	<h1>Docker Reference</h1>
+	
+	<h2>Dependencies</h2>
+	<ul>
+		<li>Docker</li>
+		<li><a href="https://docs.docker.com/compose/overview/">Docker Compose</a></li>
+		<li><a href="https://docs.docker.com/machine/overview/">Docker Machine</a></li>
+		<li>VirtualBox (for creating swarms with virtual machines)</li>
+	</ul>
+	
+	<h2>Concepts</h2>
+	<dl>
+		<dt>Container:</dt>
+		<dd>Base of the application, everything inside is virtualized and isolated from the host (except the ports and shared resources you define). The <code>Dockerfile</code> file defines what needs to go inside the container.</dd>
+		<dt>Service:</dt>
+		<dd>In a distributed application there’s often separate pieces that perform different actions (e.g. storing data on the database, converting uploaded videos, streaming data, etc…), each of these pieces is called a “service”. A single service can run one or more containers (all from the same image) by enabling load balancing. The service uses a <code>docker-compose.yml</code> file to define how many containers it needs and how they need to behave in production.</dd>
+		<dt>Task:</dt>
+		<dd>Each individual container running in a service is called a “task”, every time the service performs an action it could be run by a different task from the same service.</dd>
+		<dt>Swarm:</dt>
+		<dd>A swarm is a cluster of multiple machines running the same application through Docker. The machines in a swarm can be physical or virtual.</dd>
+		<dt>Swarm Manager:</dt>
+		<dd>Takes your commands and applies them to all the machines in a swarm. You can specify the logic the swarm manager will use to distribute the containers (equal number, focus on the least busy machines, etc).</dd>
+		<dt>Workers:</dt>
+		<dd>Extra machines that can join a swarm to help perform tasks (if allowed by the swarm manager).</dd>
+		<dt>Node:</dt>
+		<dd>Each individual machine running within a swarm.</dd>
+		<dt>Stack:</dt>
+		<dd>A stack is a group of interrelated services that share dependencies and can be scaled together. A simple application can have a single stack, more complex apps can use multiple stacks.</dd>
+		<dt>Portable image:</dt>
+		<dd>The specific OS/runtime, version number, and configuration that will run the application.</dd>
+		<dt>Repository:</dt>
+		<dd>Collection of images.</dd>
+		<dt>Registry:</dt>
+		<dd>Collection of repositories.</dd>
+	</dl>
+	
+</div><!-- .wrapper -->
+</body>
+</html>
